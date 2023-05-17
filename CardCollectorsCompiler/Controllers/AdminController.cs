@@ -80,9 +80,19 @@ namespace CardCollectorsCompiler.Controllers
             }
         }
 
+        public ActionResult AddSets()
+        {
+            return View("AddSets");
+        }
+
         public ActionResult EditSets()
         {
             return View("EditSets");
+        }
+
+        public ActionResult SaveSets()
+        {
+            return 0;
         }
     }
 }
