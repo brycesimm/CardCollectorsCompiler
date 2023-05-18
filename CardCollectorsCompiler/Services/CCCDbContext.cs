@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using CardCollectorsCompiler.Models;
+using Microsoft.CodeAnalysis;
 
 namespace CardCollectorsCompiler.Services
 {
@@ -14,6 +15,7 @@ namespace CardCollectorsCompiler.Services
         }
 
         public DbSet<Set> Sets { get; set; }
+        public DbSet<Language> Languages { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -25,6 +27,13 @@ namespace CardCollectorsCompiler.Services
 
             var connectionString = configuration.GetConnectionString("CCCcontext");
             optionsBuilder.UseSqlServer(connectionString);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Set>().ToTable("Sets");
+            modelBuilder.Entity<Language>().ToTable("Languages");
         }
     }
 }
