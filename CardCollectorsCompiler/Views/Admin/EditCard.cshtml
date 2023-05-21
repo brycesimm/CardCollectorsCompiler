@@ -6,6 +6,40 @@
 
 <h2>Edit Card</h2>
 
+<script>
+    function image() {
+        var input = document.getElementById("ImageURL").value;
+        var image = document.createElement("img");
+        var imageParent = document.getElementById("divimage");
+        while(imageParent.firstChild){
+            imageParent.removeChild(imageParent.firstChild);
+        }
+        if (input.match("^https?://(?:[a-z\-]+\.)+[a-z]{2,6}(?:/[^/#?]+)+\.(?:jpg|gif|png|jpeg|webp)$") && input != ""){
+            image.id = "imageId";
+            image.src = input;
+            image.width=270;
+            image.height=376;
+            imageParent.appendChild(image);
+        }else{
+            document.getElementById("divimage").innerHTML = "Enter a valid image URL to see a preview here!";
+        }
+    }
+</script>
+
+    @{
+        if(Model?.ImageURL != null)
+        {
+            <div id="divimage">
+                <img src="@Model.ImageURL" alt="Image" height="376" width="270"/>
+            </div>
+        }
+        else
+        {
+            <div id="divimage">
+            Enter a valid image URL to see a preview here!
+            </div>
+        }
+    }
 
 <form class="navbar-form navbar-left" asp-action="SaveCard" asp-controller="Admin" method="get">
     <input asp-for="Id" type="hidden"/>
@@ -31,8 +65,14 @@
             <input asp-for="Edition" type="text" id="Edition" name="Edition" class="form-control" placeholder="Model.Edition">
         </div>
     </div>
+    <div class="row">
+        <div class="col-12">
+            <label for="ImageURL">Image URL</label>
+            <input oninput="image()" asp-for="ImageURL" type="text" id="ImageURL" name="ImageURL" class="form-control" placeholder="Model.ImageURL" />
+        </div>
+    </div>
     <br />
     <div class="buttons">
         <input type="submit" formmethod="post" value="Save Card" class="btn btn-primary" />
-    </div>
+    </div
 </form>

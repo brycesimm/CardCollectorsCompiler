@@ -14,5 +14,6 @@ namespace CardCollectorsCompiler.Models
         public int? Number { get; set; }
         public string? Rarity { get; set; }
         public string? Edition { get; set; }
+        public string? ImageURL { get; set; }
     }
 }

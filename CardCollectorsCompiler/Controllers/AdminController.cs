@@ -2,6 +2,7 @@
 using CardCollectorsCompiler.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting.Internal;
 
 namespace CardCollectorsCompiler.Controllers
 {
