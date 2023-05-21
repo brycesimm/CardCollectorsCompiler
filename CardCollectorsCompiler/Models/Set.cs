@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CardCollectorsCompiler.Models
 {
@@ -12,5 +13,13 @@ namespace CardCollectorsCompiler.Models
         [Required]
         public int Year { get; set; }
         public int Count { get; set; }
+        [NotMapped]
+        public string FullName
+        {
+            get
+            {
+                return string.Format("{0} {1}", Name, Language);
+            }
+        }
     }
 }

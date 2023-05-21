@@ -16,6 +16,7 @@ namespace CardCollectorsCompiler.Services
 
         public DbSet<Set> Sets { get; set; }
         public DbSet<Language> Languages { get; set; }
+        public DbSet<Card> Cards { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -34,6 +35,7 @@ namespace CardCollectorsCompiler.Services
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Set>().ToTable("Sets");
             modelBuilder.Entity<Language>().ToTable("Languages");
+            modelBuilder.Entity<Card>().ToTable("Cards");
         }
     }
 }

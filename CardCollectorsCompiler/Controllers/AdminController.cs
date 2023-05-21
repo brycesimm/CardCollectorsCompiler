@@ -80,5 +80,74 @@ namespace CardCollectorsCompiler.Controllers
             var sets = CCCcontext.Sets.OrderBy(x => x.Name).ThenBy(x => x.Language).ToList();
             return View("ViewSets",sets);
         }
+
+        public ActionResult AddCard()
+        {
+            ViewBag.Sets = CCCcontext.Sets.OrderBy(x => x.Year).ThenBy(x => (x.Name + " " + x.Language)).ToList();
+            return View("AddCard");
+        }
+
+        public ActionResult EditCard(int Id)
+        {
+            var card = CCCcontext.Cards.FirstOrDefault(x => x.Id == Id);
+            ViewBag.Sets = CCCcontext.Sets.OrderBy(x => x.Year).ThenBy(x => x.Name).ToList();
+            if (card != null)
+            {
+                ViewBag.Set = CCCcontext.Sets.FirstOrDefault(x => x.Id == card.SetId);
+            }
+            else
+            {
+                ViewBag.Set = CCCcontext.Sets.FirstOrDefault();
+            }
+            return View(card);
+        }
+
+        public ActionResult DeleteCard(int Id)
+        {
+            var card = CCCcontext.Cards.FirstOrDefault(x => x.Id == Id);
+            if (card != null)
+            {
+                CCCcontext.Remove(card);
+                CCCcontext.SaveChanges();
+            }
+
+            return ViewCards();
+        }
+
+        [HttpPost]
+        public ActionResult SaveCard(Card card)
+        {
+            if (ModelState.IsValid)
+            {
+                if (card.Id == null || card.Id == 0)
+                {
+                    var similarRecords = CCCcontext.Cards.Where(x => x.Name == card.Name && x.SetId == card.SetId && x.Number == card.Number && x.Edition == card.Edition).ToList();
+
+                    if (similarRecords.Count > 0)
+                    {
+                        return View("Admin");
+                    }
+                    else
+                    {
+                        CCCcontext.Cards.Add(card);
+                    }
+                }
+                else
+                {
+                    CCCcontext.Cards.Update(card);
+                }
+
+                CCCcontext.SaveChanges();
+
+                return View("Admin");
+            }
+            return View();
+        }
+
+        public ActionResult ViewCards()
+        {
+            var cards = CCCcontext.Cards.OrderBy(x => x.SetId).ThenBy(x => x.Number).ThenBy(x => x.Name).ToList();
+            return View("Viewcards", cards);
+        }
     }
 }
