@@ -10,6 +10,8 @@ namespace CardCollectorsCompiler.Models
         [Required]
         public int? SetId { get; set; }
         [Required]
+        public int? HoloId { get; set; }
+        [Required]
         public string? Name { get; set; }
         public int? Number { get; set; }
         public string? Rarity { get; set; }

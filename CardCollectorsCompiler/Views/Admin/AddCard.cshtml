@@ -53,7 +53,11 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12">
+        <div class="col-2">
+            <label for="Holo">Holo</label>
+            <select id="Holo" name="Holo" asp-for="HoloId" asp-items="@(new SelectList(ViewBag.Holos,"Id","Value"))" class="form-select"></select>
+        </div>
+        <div class="col-10">
             <label for="ImageURL">Image URL</label>
             <input oninput="image()" asp-for="ImageURL" type="text" id="ImageURL" name="ImageURL" class="form-control" placeholder="URL" />
         </div>

@@ -85,6 +85,7 @@ namespace CardCollectorsCompiler.Controllers
         public ActionResult AddCard()
         {
             ViewBag.Sets = CCCcontext.Sets.OrderBy(x => x.Year).ThenBy(x => (x.Name + " " + x.Language)).ToList();
+            ViewBag.Holos = CCCcontext.Holos.OrderBy(x => x.Id).ToList();
             return View("AddCard");
         }
 
@@ -92,13 +93,16 @@ namespace CardCollectorsCompiler.Controllers
         {
             var card = CCCcontext.Cards.FirstOrDefault(x => x.Id == Id);
             ViewBag.Sets = CCCcontext.Sets.OrderBy(x => x.Year).ThenBy(x => x.Name).ToList();
+            ViewBag.Holos = CCCcontext.Holos.OrderBy(x => x.Id).ToList();
             if (card != null)
             {
                 ViewBag.Set = CCCcontext.Sets.FirstOrDefault(x => x.Id == card.SetId);
+                ViewBag.Holo = CCCcontext.Holos.FirstOrDefault(x => x.Id == card.HoloId);
             }
             else
             {
                 ViewBag.Set = CCCcontext.Sets.FirstOrDefault();
+                ViewBag.Holo = CCCcontext.Holos.FirstOrDefault();
             }
             return View(card);
         }
