@@ -126,7 +126,7 @@ namespace CardCollectorsCompiler.Controllers
             {
                 if (card.Id == null || card.Id == 0)
                 {
-                    var similarRecords = CCCcontext.Cards.Where(x => x.Name == card.Name && x.SetId == card.SetId && x.Number == card.Number && x.Edition == card.Edition).ToList();
+                    var similarRecords = CCCcontext.Cards.Where(x => x.Name == card.Name && x.SetId == card.SetId && x.Number == card.Number && x.Edition == card.Edition && x.HoloId == card.HoloId).ToList();
 
                     if (similarRecords.Count > 0)
                     {
