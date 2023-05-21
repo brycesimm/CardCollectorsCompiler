@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "View Cards";
+    var index = 1;
+}
+
+@model List<Card>
+
+<h2>View Cards</h2>
+
+<div class="container">
+    <div class="row header">
+        <div class="col-2">Name</div>
+        <div class="col-2">Number</div>
+        <div class="col-2">Rarity</div>
+        <div class="col-2">Edition</div>
+    </div>
+    @foreach(Card card in Model)
+    {
+        <div class="row @(index%2==0?"rowdark":"rowlight")">
+            <div class="col-2">@card.Name</div>
+            <div class="col-2">@card.Number</div>
+            <div class="col-2">@card.Rarity</div>
+            <div class="col-2">@card.Edition</div>
+            <a class="col-2" asp-controller="Admin" asp-action="EditCard" asp-route-Id="@card.Id">Edit</a>
+            <a class="col-2" asp-controller="Admin" asp-action="DeleteCard" asp-route-Id="@card.Id">Delete</a>
+        </div>
+        index++;
+    }
+</div>

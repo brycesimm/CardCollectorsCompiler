@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "View Sets";
+    var index = 1;
+}
+
+@model List<Set>
+
+<h2>View Sets</h2>
+
+<div class="container">
+    <div class="row header">
+        <div class="col-2">Name</div>
+        <div class="col-2">Language</div>
+        <div class="col-2">Year</div>
+        <div class="col-2">Count</div>
+    </div>
+    @foreach(Set set in Model)
+    {
+        <div class="row @(index%2==0?"rowdark":"rowlight")">
+            <div class="col-2">@set.Name</div>
+            <div class="col-2">@set.Language</div>
+            <div class="col-2">@set.Year</div>
+            <div class="col-2">@set.Count</div>
+            <a class="col-2" asp-controller="Admin" asp-action="EditSet" asp-route-Id="@set.Id">Edit</a>
+            <a class="col-2" asp-controller="Admin" asp-action="DeleteSet" asp-route-Id="@set.Id">Delete</a>
+        </div>
+        index++;
+    }
+</div>

@@ -1,88 +1,153 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CardCollectorsCompiler.Models;
+using CardCollectorsCompiler.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CardCollectorsCompiler.Controllers
 {
     public class AdminController : Controller
     {
+        private CCCDbContext CCCcontext;
+
+        public AdminController(CCCDbContext context)
+        {
+            CCCcontext = context;
+        }
+
         // GET: AdminController
         public ActionResult Index()
         {
             return View("Admin");
         }
 
-        // GET: AdminController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult AddSet()
         {
-            return View();
+            ViewBag.Languages = CCCcontext.Languages.OrderBy(x => x.Value).ToList();
+            return View("AddSet");
         }
 
-        // GET: AdminController/Create
-        public ActionResult Create()
+        public ActionResult EditSet(int Id)
         {
-            return View();
+            var set = CCCcontext.Sets.FirstOrDefault(x => x.Id == Id);
+            ViewBag.Languages = CCCcontext.Languages.OrderBy(x => x.Value).ToList();
+            return View(set);
         }
 
-        // POST: AdminController/Create
+        public ActionResult DeleteSet(int Id)
+        {
+            var set = CCCcontext.Sets.FirstOrDefault(x => x.Id == Id);
+            if(set != null)
+            {
+                CCCcontext.Remove(set);
+                CCCcontext.SaveChanges();
+            }
+
+            return ViewSets();
+        }
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult SaveSet(Set set)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+                if(set.Id == null || set.Id == 0)
+                {
+                    var similarRecords = CCCcontext.Sets.Where(x => x.Name == set.Name && x.Language == set.Language && x.Year == set.Year && x.Count == set.Count).ToList();
+                    
+                    if (similarRecords.Count > 0)
+                    {
+                        return View("Admin");
+                    }
+                    else
+                    {
+                        CCCcontext.Sets.Add(set);
+                    }
+                }
+                else
+                {
+                    CCCcontext.Sets.Update(set);
+                }
 
-        // GET: AdminController/Edit/5
-        public ActionResult Edit(int id)
-        {
+                CCCcontext.SaveChanges();
+
+                return View("Admin");
+            }
             return View();
         }
 
-        // POST: AdminController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult ViewSets()
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var sets = CCCcontext.Sets.OrderBy(x => x.Name).ThenBy(x => x.Language).ToList();
+            return View("ViewSets",sets);
         }
 
-        // GET: AdminController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult AddCard()
         {
+            ViewBag.Sets = CCCcontext.Sets.OrderBy(x => x.Year).ThenBy(x => (x.Name + " " + x.Language)).ToList();
+            return View("AddCard");
+        }
+
+        public ActionResult EditCard(int Id)
+        {
+            var card = CCCcontext.Cards.FirstOrDefault(x => x.Id == Id);
+            ViewBag.Sets = CCCcontext.Sets.OrderBy(x => x.Year).ThenBy(x => x.Name).ToList();
+            if (card != null)
+            {
+                ViewBag.Set = CCCcontext.Sets.FirstOrDefault(x => x.Id == card.SetId);
+            }
+            else
+            {
+                ViewBag.Set = CCCcontext.Sets.FirstOrDefault();
+            }
+            return View(card);
+        }
+
+        public ActionResult DeleteCard(int Id)
+        {
+            var card = CCCcontext.Cards.FirstOrDefault(x => x.Id == Id);
+            if (card != null)
+            {
+                CCCcontext.Remove(card);
+                CCCcontext.SaveChanges();
+            }
+
+            return ViewCards();
+        }
+
+        [HttpPost]
+        public ActionResult SaveCard(Card card)
+        {
+            if (ModelState.IsValid)
+            {
+                if (card.Id == null || card.Id == 0)
+                {
+                    var similarRecords = CCCcontext.Cards.Where(x => x.Name == card.Name && x.SetId == card.SetId && x.Number == card.Number && x.Edition == card.Edition).ToList();
+
+                    if (similarRecords.Count > 0)
+                    {
+                        return View("Admin");
+                    }
+                    else
+                    {
+                        CCCcontext.Cards.Add(card);
+                    }
+                }
+                else
+                {
+                    CCCcontext.Cards.Update(card);
+                }
+
+                CCCcontext.SaveChanges();
+
+                return View("Admin");
+            }
             return View();
         }
 
-        // POST: AdminController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult ViewCards()
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        public ActionResult EditSets()
-        {
-            return View("EditSets");
+            var cards = CCCcontext.Cards.OrderBy(x => x.SetId).ThenBy(x => x.Number).ThenBy(x => x.Name).ToList();
+            return View("Viewcards", cards);
         }
     }
 }

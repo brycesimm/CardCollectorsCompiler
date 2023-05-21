@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Edit Set";
+}
+
+@model Set
+
+<h2>Edit Set</h2>
+
+<form class="navbar-form navbar-left" asp-action="SaveSet" asp-controller="Admin" method="get">
+    <input asp-for="Id" type="hidden" />
+    <div class="row">
+        <div class="col-3">
+            <label for="Name">Name</label>
+            <input asp-for="Name" type="text" id="Name" name="Name" class="form-control" placeholder="@Model.Name">
+        </div>
+        <div class="col-3">
+            <label for="Language">Language</label>
+            <select id="Language" name="Language" asp-for="Language" asp-items="@(new SelectList(ViewBag.Languages,"Value","Value",Model.Language))" class="form-select"></select>
+        </div>
+        <div class="col-3">
+            <label for="Year">Year</label>
+            <input asp-for="Year" type="text" id="Year" name="Year" class="form-control" placeholder="@Model.Year">
+        </div>
+        <div class="col-3">
+            <label for="Count">Count</label>
+            <input asp-for="Count" type="text" id="Count" name="Count" class="form-control" placeholder="@Model.Count">
+        </div>
+    </div>
+    <br />
+    <div class="buttons">
+        <input type="submit" formmethod="post" value="Save Set" class="btn btn-primary" />
+    </div>
+</form>
