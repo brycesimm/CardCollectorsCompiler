@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Edit Card";
+}
+
+@model Card
+
+<h2>Edit Card</h2>
+
+<script>
+    function image() {
+        var input = document.getElementById("ImageURL").value;
+        var image = document.createElement("img");
+        var imageParent = document.getElementById("divimage");
+        while(imageParent.firstChild){
+            imageParent.removeChild(imageParent.firstChild);
+        }
+        if (input.match("^https?://(?:[a-z\-]+\.)+[a-z]{2,6}(?:/[^/#?]+)+\.(?:jpg|gif|png|jpeg|webp)$") && input != ""){
+            image.id = "imageId";
+            image.src = input;
+            image.width=270;
+            image.height=376;
+            imageParent.appendChild(image);
+        }else{
+            document.getElementById("divimage").innerHTML = "Enter a valid image URL to see a preview here!";
+        }
+    }
+</script>
+
+    @{
+        if(Model?.ImageURL != null)
+        {
+            <div id="divimage">
+                <img src="@Model.ImageURL" alt="Image" height="376" width="270"/>
+            </div>
+        }
+        else
+        {
+            <div id="divimage">
+            Enter a valid image URL to see a preview here!
+            </div>
+        }
+    }
+
+<form class="navbar-form navbar-left" asp-action="SaveCard" asp-controller="Admin" method="get">
+    <input asp-for="Id" type="hidden"/>
+    <div class="row">
+        <div class="col-3">
+            <label for="Name">Name</label>
+            <input asp-for="Name" type="text" id="Name" name="Name" class="form-control" placeholder="Model.Name">
+        </div>
+        <div class="col-3">
+            <label for="Set">Set</label>
+            <select id="Set" name="SetId" asp-for="SetId" asp-items="@(new SelectList(ViewBag.Sets,"Id","FullName",ViewBag.Set))" class="form-select"></select>
+        </div>
+        <div class="col-2">
+            <label for="Number">Number</label>
+            <input asp-for="Number" type="text" id="Number" name="Number" class="form-control" placeholder="Model.Number">
+        </div>
+        <div class="col-2">
+            <label for="Rarity">Rarity</label>
+            <input asp-for="Rarity" type="text" id="Rarity" name="Rarity" class="form-control" placeholder="Model.Rarity">
+        </div>
+        <div class="col-2">
+            <label for="Edition">Edition</label>
+            <input asp-for="Edition" type="text" id="Edition" name="Edition" class="form-control" placeholder="Model.Edition">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <label for="Holo">Holo</label>
+            <select id="Holo" name="HoloId" asp-for="HoloId" asp-items="@(new SelectList(ViewBag.Holos,"Id","Value",ViewBag.Holo))" class="form-select"></select>
+        </div>
+        <div class="col-10">
+            <label for="ImageURL">Image URL</label>
+            <input oninput="image()" asp-for="ImageURL" type="text" id="ImageURL" name="ImageURL" class="form-control" placeholder="Model.ImageURL" />
+        </div>
+    </div>
+    <br />
+    <div class="buttons">
+        <input type="submit" formmethod="post" value="Save Card" class="btn btn-primary" />
+    </div
+</form>

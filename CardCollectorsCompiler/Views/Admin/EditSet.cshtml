@@ -4,7 +4,7 @@
 
 @model Set
 
-<h2>Edit Sets</h2>
+<h2>Edit Set</h2>
 
 <form class="navbar-form navbar-left" asp-action="SaveSet" asp-controller="Admin" method="get">
     <input asp-for="Id" type="hidden" />
@@ -26,7 +26,7 @@
             <input asp-for="Count" type="text" id="Count" name="Count" class="form-control" placeholder="@Model.Count">
         </div>
     </div>
-    <br
+    <br />
     <div class="buttons">
         <input type="submit" formmethod="post" value="Save Set" class="btn btn-primary" />
     </div>

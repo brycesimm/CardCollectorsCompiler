@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "View Cards";
+    var index = 1;
+}
+
+@model List<Card>
+
+<h2>View Cards</h2>
+
+<div><a asp-controller="Admin" asp-action="AddCard">Add Card</a></div>
+
+<div class="container">
+    <div class="row header">
+        <div class="col-2">Name</div>
+        <div class="col-1">Number</div>
+        <div class="col-1">Set Count</div>
+        <div class="col-1">Rarity</div>
+        <div class="col-1">Edition</div>
+        <div class="col-2">Set</div>
+        <div class="col-2">Holo</div>
+    </div>
+    @foreach(Card card in Model)
+    {
+        dynamic Sets = ViewBag.Sets;
+        var newSets = (List<Set>)Sets;
+        var set = newSets.FirstOrDefault(x => x.Id == card.SetId);
+        string? setName = "";
+        int? setCount = 0;
+        if(set != null)
+        {
+            setName = set.Name + " " + set.Language;
+            setCount = set.Count;
+        }
+
+        dynamic Holos = ViewBag.Holos;
+        var newHolos = (List<Holo>)Holos;
+        var holo = newHolos.FirstOrDefault(x => x.Id == card.HoloId);
+        string? holoName = "";
+        if(holo != null)
+        {
+            holoName = holo.Value;
+        }
+        <div class="row @(index%2==0?"rowdark":"rowlight")">
+            <div class="col-2">@card.Name</div>
+            <div class="col-1">@card.Number</div>
+            <div class="col-1">@setCount</div>
+            <div class="col-1">@card.Rarity</div>
+            <div class="col-1">@card.Edition</div>
+            <div class="col-2">@setName</div>
+            <div class="col-2">@holo.Value</div>
+            <a class="col-1" asp-controller="Admin" asp-action="EditCard" asp-route-Id="@card.Id">Edit</a>
+            <a class="col-1" asp-controller="Admin" asp-action="DeleteCard" asp-route-Id="@card.Id">Delete</a>
+        </div>
+        index++;
+    }
+</div>
