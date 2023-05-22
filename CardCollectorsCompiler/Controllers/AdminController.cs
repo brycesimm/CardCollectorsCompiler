@@ -130,7 +130,7 @@ namespace CardCollectorsCompiler.Controllers
 
                     if (similarRecords.Count > 0)
                     {
-                        return View("Admin");
+                        return ViewCards();
                     }
                     else
                     {
@@ -144,7 +144,7 @@ namespace CardCollectorsCompiler.Controllers
 
                 CCCcontext.SaveChanges();
 
-                return View("Admin");
+                return ViewCards();
             }
             return View();
         }
@@ -152,6 +152,8 @@ namespace CardCollectorsCompiler.Controllers
         public ActionResult ViewCards()
         {
             var cards = CCCcontext.Cards.OrderBy(x => x.SetId).ThenBy(x => x.Number).ThenBy(x => x.Name).ToList();
+            ViewBag.Sets = CCCcontext.Sets.ToList();
+            ViewBag.Holos = CCCcontext.Holos.ToList();
             return View("Viewcards", cards);
         }
     }
